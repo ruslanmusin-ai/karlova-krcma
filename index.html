@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <title>Karluv Pivovar | Partner Pitch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Prata&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=20260724-gallery-focus-fix" />
+  </head>
+  <body>
+    <main>
+      <section class="hero" id="hero">
+        <div class="hero__media-wrap">
+          <video
+            id="heroVideo"
+            class="hero__media"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            poster=""
+          ></video>
+          <div class="hero__media-placeholder" id="videoPlaceholder" aria-hidden="true">
+            <p>Video pending</p>
+            <span>Add the final hero video here.</span>
+          </div>
+          <div class="hero__grain"></div>
+        </div>
+
+        <div class="hero__content">
+          <h1 class="hero__title" id="heroTitle"></h1>
+          <p class="hero__subtitle" id="heroSubtitle"></p>
+          <a class="hero__cta" href="#flavors">EXPLORE OUR BEERS</a>
+        </div>
+      </section>
+
+      <section class="flavors" id="flavors">
+        <div class="flavors__inner">
+          <div class="flavors__intro reveal">
+            <h2 class="flavors__title">Discover the character of Karlova Krčma</h2>
+            <p class="flavors__lead">
+              Seven beers, seven distinctive tastes. Traditionally brewed with Czech hops,
+              quality malt, and pure natural water.
+            </p>
+          </div>
+
+          <div class="expanding-gallery">
+            <div
+              class="expanding-cards reveal"
+              id="expanding-cards"
+              aria-label="Interactive beer gallery"
+            >
+            <article class="expanding-card expanding-card--video">
+              <video
+                src="assets/karlova-premium-card.mp4"
+                class="expanding-card__image"
+                muted
+                loop
+                playsinline
+                preload="auto"
+                aria-label="Video featuring a can of Karlova Krčma Premium 12 beer"
+              ></video>
+              <div class="expanding-card__gradient"></div>
+              <div class="expanding-card__title-wrap">
+                <span class="expanding-card__title">Karlova Krčma Premium 12°</span>
+              </div>
+              <div class="expanding-card__reveal">
+                <div class="expanding-card__panel">
+                  <h3 class="expanding-card__panel-title">Full-bodied Czech lager</h3>
+                  <p class="expanding-card__panel-text">
+                    Balanced malt character, gentle hop bitterness, and a clean finish.
+                    Our signature lager at 4.8% ABV.
+                  </p>
+                  <span class="expanding-card__link">Learn more →</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="expanding-card expanding-card--video">
+              <video
+                src="assets/karlova-svetle-card.mp4?v=20260726-order"
+                class="expanding-card__image"
+                muted loop playsinline preload="auto"
+                aria-label="Video featuring a can of Karlova Krčma Světlé 10 beer"
+              ></video>
+              <div class="expanding-card__gradient"></div>
+              <div class="expanding-card__title-wrap">
+                <span class="expanding-card__title">Karlova Krčma Světlé 10°</span>
+              </div>
+              <div class="expanding-card__reveal">
+                <div class="expanding-card__panel">
+                  <h3 class="expanding-card__panel-title">Light Czech pale beer</h3>
+                  <p class="expanding-card__panel-text">
+                    Crisp and highly drinkable, with a light malt body and pleasant bitterness.
+                    4.0% ABV.
+                  </p>
+                  <span class="expanding-card__link">Learn more →</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="expanding-card expanding-card--video">
+              <video
+                src="assets/karlova-jantar-card.mp4?v=20260726-order"
+                class="expanding-card__image"
+                muted loop playsinline preload="auto"
+                aria-label="Video featuring a can of Karlova Krčma Jantar 12 beer"
+              ></video>
+              <div class="expanding-card__gradient"></div>
+              <div class="expanding-card__title-wrap">
+                <span class="expanding-card__title">Karlova Krčma Jantar 12°</span>
+              </div>
+              <div class="expanding-card__reveal">
+                <div class="expanding-card__panel">
+                  <h3 class="expanding-card__panel-title">Unfiltered amber lager</h3>
+                  <p class="expanding-card__panel-text">
+                    An unfiltered amber beer with a fuller malt character and a gentle hoppy
+                    finish. 5.2% ABV.
+                  </p>
+                  <span class="expanding-card__link">Learn more →</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="expanding-card expanding-card--video">
+              <video
+                src="assets/karlova-psenicne-card.mp4?v=20260726-order"
+                class="expanding-card__image"
+                muted loop playsinline preload="auto"
+                aria-label="Video featuring a can of Karlova Krčma Pšeničné 12 wheat beer"
+              ></video>
+              <div class="expanding-card__gradient"></div>
+              <div class="expanding-card__title-wrap">
+                <span class="expanding-card__title">Karlova Krčma Pšeničné 12°</span>
+              </div>
+              <div class="expanding-card__reveal">
+                <div class="expanding-card__panel">
+                  <h3 class="expanding-card__panel-title">Wheat Hefeweizen</h3>
+                  <p class="expanding-card__panel-text">
+                    A velvety wheat beer with natural haze, fruity notes, and a lightly
+                    spiced finish.
+                  </p>
+                  <span class="expanding-card__link">Learn more →</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="expanding-card expanding-card--video">
+              <video
+                src="assets/karlova-rezane-card.mp4?v=20260726-order"
+                class="expanding-card__image"
+                muted loop playsinline preload="auto"
+                aria-label="Video featuring a can of Karlova Krčma Řezané 11 beer"
+              ></video>
+              <div class="expanding-card__gradient"></div>
+              <div class="expanding-card__title-wrap">
+                <span class="expanding-card__title">Karlova Krčma Řezané 11°</span>
+              </div>
+              <div class="expanding-card__reveal">
+                <div class="expanding-card__panel">
+                  <h3 class="expanding-card__panel-title">Harmonious semi-dark lager</h3>
+                  <p class="expanding-card__panel-text">
+                    A balanced blend of pale and dark beer, with caramel notes and gentle
+                    bitterness. 4.6% ABV.
+                  </p>
+                  <span class="expanding-card__link">Learn more →</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="expanding-card expanding-card--video">
+              <video
+                src="assets/karlova-cerne-card.mp4?v=20260726-order"
+                class="expanding-card__image"
+                muted loop playsinline preload="auto"
+                aria-label="Video featuring a can of Karlova Krčma Černé 11 beer"
+              ></video>
+              <div class="expanding-card__gradient"></div>
+              <div class="expanding-card__title-wrap">
+                <span class="expanding-card__title">Karlova Krčma Černé 11°</span>
+              </div>
+              <div class="expanding-card__reveal">
+                <div class="expanding-card__panel">
+                  <h3 class="expanding-card__panel-title">Dark and velvety</h3>
+                  <p class="expanding-card__panel-text">
+                    A dark beer with a full malt character and notes of caramel and roasted malt.
+                    Smooth and balanced at 4.4% ABV.
+                  </p>
+                  <span class="expanding-card__link">Learn more →</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="expanding-card expanding-card--video">
+              <video
+                src="assets/karlova-nonalcohol-card.mp4?v=20260726-1805"
+                class="expanding-card__image"
+                muted loop playsinline preload="auto"
+                aria-label="Video featuring a can of Karlova Krčma Premium 0 alcohol-free beer"
+              ></video>
+              <div class="expanding-card__gradient"></div>
+              <div class="expanding-card__title-wrap">
+                <span class="expanding-card__title">Karlova Krčma Premium 0</span>
+              </div>
+              <div class="expanding-card__reveal">
+                <div class="expanding-card__panel">
+                  <h3 class="expanding-card__panel-title">Alcohol-free refreshment</h3>
+                  <p class="expanding-card__panel-text">
+                    A refreshing alcohol-free beer with a light malt profile, clean taste,
+                    and gentle hop bitterness.
+                  </p>
+                  <span class="expanding-card__link">Learn more →</span>
+                </div>
+              </div>
+            </article>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="production section-shell" id="production">
+        <div class="section-head">
+          <p class="section-head__eyebrow">Экран 3</p>
+          <h2 class="section-head__title">Производство как живая демонстрация бренда</h2>
+          <p class="section-head__lead">
+            Этот экран собран как витрина для видео и фото с производства. Сейчас он уже
+            показывает механику выбора формата и фактуру процесса, а финальные медиа можно просто
+            подменить в готовые слоты.
+          </p>
+        </div>
+
+        <div class="production__layout">
+          <div class="production__selector" id="productionSelector" aria-label="Форматы производства"></div>
+
+          <article class="production-stage" id="productionStage">
+            <div class="production-stage__media">
+              <video
+                id="productionVideo"
+                class="production-stage__video"
+                muted
+                loop
+                playsinline
+                preload="metadata"
+              ></video>
+              <div class="production-stage__overlay"></div>
+              <div class="production-stage__placeholder" id="productionPlaceholder">
+                Подключите готовое видео этого этапа
+              </div>
+            </div>
+
+            <div class="production-stage__content">
+              <p class="production-stage__eyebrow" id="productionEyebrow"></p>
+              <h3 class="production-stage__title" id="productionTitle"></h3>
+              <p class="production-stage__text" id="productionText"></p>
+
+              <div class="production-stage__fact">
+                <span class="production-stage__fact-label">Интересный факт</span>
+                <p id="productionFact"></p>
+              </div>
+
+              <div class="production-stage__metrics" id="productionMetrics"></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="partners section-shell" id="partners">
+        <div class="section-head">
+          <p class="section-head__eyebrow">Экран 4</p>
+          <h2 class="section-head__title">Инструмент для переговоров, а не просто лендинг</h2>
+          <p class="section-head__lead">
+            После знакомства с брендом и линейкой человеку нужен один понятный следующий шаг:
+            оставить контакт и перейти к обсуждению сотрудничества.
+          </p>
+        </div>
+
+        <div class="partners__hero">
+          <div class="partners__reasons" id="partnerReasons"></div>
+
+          <form class="partner-form">
+            <p class="partner-form__eyebrow">Become a Partner</p>
+            <h3 class="partner-form__title">Оставьте контакт для обсуждения сотрудничества</h3>
+
+            <label class="partner-form__label" for="partnerName">Имя / компания</label>
+            <input id="partnerName" class="partner-form__input" type="text" placeholder="Например, Retail Group CZ" />
+
+            <label class="partner-form__label" for="partnerContact">Email или телефон</label>
+            <input id="partnerContact" class="partner-form__input" type="text" placeholder="+420 или business@email.com" />
+
+            <label class="partner-form__label" for="partnerMessage">Комментарий</label>
+            <textarea
+              id="partnerMessage"
+              class="partner-form__textarea"
+              placeholder="Канал продаж, рынок, формат поставки"
+            ></textarea>
+
+            <button class="partner-form__button" type="button">ОБСУДИТЬ СОТРУДНИЧЕСТВО</button>
+            <a class="partner-form__link" id="partnersJoinEmail" href="#">info@karlu-pivovar.cz</a>
+          </form>
+        </div>
+
+        <div class="partners__usage" id="partnerUsage"></div>
+      </section>
+    </main>
+
+    <dialog class="card-modal" id="cardModal" aria-labelledby="cardModalTitle">
+      <div class="card-modal__shell">
+        <button class="card-modal__close" id="cardModalClose" type="button" aria-label="Закрыть">
+          ×
+        </button>
+        <div class="card-modal__media">
+          <img class="card-modal__image" id="cardModalImage" src="" alt="" />
+        </div>
+        <div class="card-modal__content">
+          <h2 class="card-modal__title" id="cardModalTitle"></h2>
+          <h3 class="card-modal__subtitle" id="cardModalSubtitle"></h3>
+          <p class="card-modal__text" id="cardModalText"></p>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="app.js?v=20260724-expanding-gallery"></script>
+  </body>
+</html>
