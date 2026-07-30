@@ -114,6 +114,28 @@ function setupCardGallery() {
   });
 }
 
+function setupPartnerInquiry() {
+  const form = document.getElementById("partnerInquiryForm");
+  if (!form) return;
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+
+    const data = new FormData(form);
+    const subject = `Partnership inquiry: ${data.get("partnership")}`;
+    const body = [
+      `Name: ${data.get("name")}`,
+      `Email: ${data.get("email")}`,
+      `Partnership type: ${data.get("partnership")}`,
+      "",
+      String(data.get("message"))
+    ].join("\n");
+
+    window.location.href = `mailto:info@karlu-pivovar.cz?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  });
+}
+
 function setupScrollMotion() {
   const heroContent = document.querySelector(".hero__content");
   const revealItems = Array.from(document.querySelectorAll(".reveal, .section-head, .production-stage"));
@@ -150,4 +172,5 @@ function setupScrollMotion() {
 populateHero();
 setupHeroVideo();
 setupCardGallery();
+setupPartnerInquiry();
 setupScrollMotion();
