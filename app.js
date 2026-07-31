@@ -118,21 +118,68 @@ function setupPartnerInquiry() {
   const form = document.getElementById("partnerInquiryForm");
   if (!form) return;
 
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!form.reportValidity()) return;
 
-    const data = new FormData(form);
-    const subject = `Partnership inquiry: ${data.get("partnership")}`;
-    const body = [
-      `Name: ${data.get("name")}`,
-      `Email: ${data.get("email")}`,
-      `Partnership type: ${data.get("partnership")}`,
-      "",
-      String(data.get("message"))
-    ].join("\n");
+    const button = form.querySelector(".contact-form__submit");
+    const buttonLabel = button?.querySelector("span");
+    const status = form.querySelector(".contact-form__status");
 
-    window.location.href = `mailto:info@karlu-pivovar.cz?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (button) button.disabled = true;
+    if (buttonLabel) buttonLabel.textContent = "Sending…";
+    if (status) {
+      status.textContent = "";
+      status.className = "contact-form__status";
+    }
+
+    try {
+      const endpoint = form.action.replace("formsubmit.co/", "formsubmit.co/ajax/");
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(form)
+      });
+
+      if (!response.ok) throw new Error("Request failed");
+
+      form.reset();
+      if (status) {
+        status.textContent = "Thank you. Your message has been sent.";
+        status.classList.add("is-success");
+      }
+    } catch {
+      if (status) {
+        status.textContent = "We couldn’t send your message. Please email Evg.Grigoriev@karluv-pivovar.cz.";
+        status.classList.add("is-error");
+      }
+    } finally {
+      if (button) button.disabled = false;
+      if (buttonLabel) buttonLabel.textContent = "Submit Inquiry";
+    }
+  });
+}
+
+function setupPremiumMotion() {
+  const body = document.body;
+  const beerCards = Array.from(document.querySelectorAll(".expanding-card"));
+  const teamCards = Array.from(document.querySelectorAll(".team-contact"));
+  const contactForm = document.querySelector(".contact-form-wrap");
+
+  body.classList.add("motion-enabled");
+
+  beerCards.forEach((card, index) => {
+    card.style.setProperty("--motion-index", index);
+  });
+
+  teamCards.forEach((card, index) => {
+    card.dataset.motionDelay = String(index * 70);
+  });
+
+  if (contactForm) contactForm.dataset.motionDelay = "190";
+
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => body.classList.add("motion-ready"));
   });
 }
 
@@ -144,7 +191,9 @@ function setupScrollMotion() {
     (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
+          const delay = Number(entry.target.dataset.motionDelay || 0);
+          window.setTimeout(() => entry.target.classList.add("is-visible"), delay);
+          observer.unobserve(entry.target);
         }
       });
     },
@@ -173,4 +222,5 @@ populateHero();
 setupHeroVideo();
 setupCardGallery();
 setupPartnerInquiry();
+setupPremiumMotion();
 setupScrollMotion();

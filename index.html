@@ -41,6 +41,11 @@
           <p class="hero__subtitle" id="heroSubtitle"></p>
           <a class="hero__cta" href="#flavors">EXPLORE OUR BEERS</a>
         </div>
+
+        <div class="hero__scroll-cue" aria-hidden="true">
+          <span class="hero__scroll-icon" aria-hidden="true"><i></i></span>
+          <span>Scroll to explore</span>
+        </div>
       </section>
 
       <section class="flavors" id="flavors">
@@ -229,109 +234,82 @@
       </section>
 
       <section class="contact-section" id="contact">
-        <div class="contact-section__glow" aria-hidden="true"></div>
-
         <div class="contact-section__inner">
           <header class="contact-section__intro reveal">
-            <span class="contact-section__badge">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 6l8 5 8-5"></path>
-                <rect width="20" height="14" x="2" y="5" rx="2"></rect>
-              </svg>
-              Let&rsquo;s work together
-            </span>
-            <h2 class="contact-section__title">Bring Karlova Krčma to your market</h2>
+            <h2 class="contact-section__title">Meet the people behind Karlův Pivovar</h2>
             <p class="contact-section__lead">
-              Tell us about your distribution network, venue, or retail opportunity. We&rsquo;ll
-              help you choose the right range and supply format for your market.
+              Talk directly with the people shaping Karlův Pivovar — from brand vision and
+              international growth to brewing technology.
             </p>
           </header>
 
           <div class="contact-section__layout">
             <div class="contact-form-wrap reveal">
-              <h3 class="contact-form-wrap__title">Start a conversation</h3>
-              <form class="contact-form" id="partnerInquiryForm">
+              <h3 class="contact-form-wrap__title">Send an Inquiry</h3>
+              <form
+                class="contact-form"
+                id="partnerInquiryForm"
+                action="https://formsubmit.co/Evg.Grigoriev@karluv-pivovar.cz"
+                method="POST"
+              >
+                <input type="hidden" name="_subject" value="New inquiry from Karlova Krčma website" />
+                <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_captcha" value="false" />
                 <div class="contact-form__pair">
                   <label class="contact-field">
                     <span>Name</span>
                     <input name="name" type="text" autocomplete="name" placeholder="Your name" required />
                   </label>
                   <label class="contact-field">
-                    <span>Business email</span>
-                    <input name="email" type="email" autocomplete="email" placeholder="you@company.com" required />
+                    <span>Email</span>
+                    <input name="email" type="email" autocomplete="email" placeholder="your@email.com" required />
                   </label>
                 </div>
 
-                <label class="contact-field">
-                  <span>Partnership type</span>
-                  <select name="partnership" required>
-                    <option value="" selected disabled>Select an option</option>
-                    <option>Distribution</option>
-                    <option>Retail</option>
-                    <option>HoReCa</option>
-                    <option>Events and exhibitions</option>
-                    <option>Other</option>
-                  </select>
-                </label>
-
-                <label class="contact-field">
-                  <span>Message</span>
-                  <textarea name="message" rows="5" placeholder="Tell us about your market, volumes, and preferred formats" required></textarea>
-                </label>
-
                 <button class="contact-form__submit" type="submit">
-                  <span>Send partnership request</span>
+                  <span>Submit Inquiry</span>
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="m22 2-7 20-4-9-9-4Z"></path>
                     <path d="M22 2 11 13"></path>
                   </svg>
                 </button>
+                <p class="contact-form__status" aria-live="polite"></p>
               </form>
             </div>
 
             <aside class="contact-details" aria-label="Contact details">
-              <a class="contact-detail reveal" href="mailto:info@karlu-pivovar.cz">
-                <span class="contact-detail__icon">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M4 6l8 5 8-5"></path>
-                    <rect width="20" height="14" x="2" y="5" rx="2"></rect>
-                  </svg>
+              <a class="team-contact reveal" href="mailto:Jaroslav.Hubacek@karluv-pivovar.cz">
+                <span class="team-contact__portrait">
+                  <img src="assets/team-jaroslav.png" alt="Jaroslav Hubáček" />
                 </span>
-                <span>
-                  <strong>Email</strong>
-                  <small>info@karlu-pivovar.cz</small>
+                <span class="team-contact__copy">
+                  <strong>Jaroslav Hubáček</strong>
+                  <small>Ideologist &amp; Founder</small>
+                  <span>Jaroslav.Hubacek@karluv-pivovar.cz</span>
                 </span>
               </a>
 
-              <a class="contact-detail reveal" href="https://karluv-pivovar.cz/en" target="_blank" rel="noreferrer">
-                <span class="contact-detail__icon">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"></path>
-                  </svg>
+              <a class="team-contact reveal" href="mailto:Evg.Grigoriev@karluv-pivovar.cz">
+                <span class="team-contact__portrait team-contact__portrait--monogram" aria-hidden="true">
+                  EG
                 </span>
-                <span>
-                  <strong>Official website</strong>
-                  <small>karluv-pivovar.cz</small>
+                <span class="team-contact__copy">
+                  <strong>Evgheni Grigoriev</strong>
+                  <small>Managing Partner &amp; CEO</small>
+                  <span>Evg.Grigoriev@karluv-pivovar.cz</span>
                 </span>
               </a>
 
-              <div class="contact-detail reveal">
-                <span class="contact-detail__icon">
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"></path>
-                    <circle cx="12" cy="10" r="2.5"></circle>
-                  </svg>
+              <a class="team-contact reveal" href="mailto:Pter.Hostas@karluv-pivovar.cz">
+                <span class="team-contact__portrait team-contact__portrait--monogram" aria-hidden="true">
+                  PH
                 </span>
-                <span>
-                  <strong>Origin</strong>
-                  <small>Czech Republic</small>
+                <span class="team-contact__copy">
+                  <strong>Petr Hostáš</strong>
+                  <small>Chief Technologist · Sládek</small>
+                  <span>Pter.Hostas@karluv-pivovar.cz</span>
                 </span>
-              </div>
-
-              <p class="contact-details__note reveal">
-                Available for distributors, retail partners, HoReCa, and international events.
-              </p>
+              </a>
             </aside>
           </div>
         </div>
