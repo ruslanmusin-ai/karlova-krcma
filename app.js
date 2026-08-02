@@ -6,9 +6,9 @@ const content = {
 };
 
 const heroVideoConfig = {
-  videoSrc: "assets/hero-background.mp4",
+  videoSrc: "assets/hero-background.mp4?v=20260802-faststart",
   fallbackVideoSrc: "",
-  posterSrc: "",
+  posterSrc: "assets/hero-poster.webp",
   isPlaceholder: false
 };
 
@@ -31,6 +31,8 @@ function setupHeroVideo() {
   }
 
   video.src = heroVideoConfig.videoSrc;
+  video.load();
+  video.play().catch(() => {});
   if (heroVideoConfig.fallbackVideoSrc) {
     video.onerror = () => {
       if (video.src.includes(heroVideoConfig.fallbackVideoSrc)) return;
@@ -40,6 +42,9 @@ function setupHeroVideo() {
     };
   }
   video.addEventListener("canplay", () => {
+    placeholder.style.display = "none";
+  });
+  video.addEventListener("loadeddata", () => {
     placeholder.style.display = "none";
   });
 }
@@ -53,11 +58,40 @@ function setupCardGallery() {
   const modalSubtitle = document.getElementById("cardModalSubtitle");
   const modalText = document.getElementById("cardModalText");
   const cards = Array.from(gallery?.querySelectorAll(".expanding-card") ?? []);
+  const cardVideos = cards
+    .map((card) => card.querySelector("video.expanding-card__image"))
+    .filter(Boolean);
 
   if (
     !gallery || !modal || !modalClose || !modalImage ||
     !modalTitle || !modalSubtitle || !modalText || cards.length === 0
   ) return;
+
+  const attachVideo = (video, preload = "metadata") => {
+    if (!video.src) {
+      video.preload = preload;
+      video.src = video.dataset.src;
+      video.load();
+      return;
+    }
+
+    if (preload === "auto" && video.preload !== "auto") {
+      video.preload = "auto";
+    }
+  };
+
+  const proximityObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        attachVideo(entry.target, "metadata");
+        observer.unobserve(entry.target);
+      });
+    },
+    { rootMargin: "700px 0px", threshold: 0 }
+  );
+
+  cardVideos.forEach((video) => proximityObserver.observe(video));
 
   const openCard = (card) => {
     const image = card.querySelector(".expanding-card__image");
@@ -80,8 +114,12 @@ function setupCardGallery() {
     if (hoverVideo) {
       card.tabIndex = 0;
       card.setAttribute("aria-label", hoverVideo.getAttribute("aria-label"));
+      const isTouchFirst = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
-      const playVideo = () => hoverVideo.play().catch(() => {});
+      const playVideo = () => {
+        attachVideo(hoverVideo, "auto");
+        hoverVideo.play().catch(() => {});
+      };
       const resetVideo = () => {
         hoverVideo.pause();
         hoverVideo.currentTime = 0;
@@ -89,8 +127,16 @@ function setupCardGallery() {
 
       card.addEventListener("mouseenter", playVideo);
       card.addEventListener("mouseleave", resetVideo);
-      card.addEventListener("focus", playVideo);
-      card.addEventListener("blur", resetVideo);
+
+      if (isTouchFirst) {
+        card.addEventListener("click", () => {
+          if (hoverVideo.paused) playVideo();
+          else resetVideo();
+        });
+      } else {
+        card.addEventListener("focus", playVideo);
+        card.addEventListener("blur", resetVideo);
+      }
       return;
     }
 
@@ -112,6 +158,38 @@ function setupCardGallery() {
   modal.addEventListener("close", () => {
     document.body.classList.remove("modal-open");
   });
+
+  const warmVideosSequentially = () => {
+    let index = 0;
+    const schedule = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 250));
+
+    const warmNext = () => {
+      const video = cardVideos[index++];
+      if (!video) return;
+
+      attachVideo(video, "auto");
+      if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+        schedule(warmNext);
+        return;
+      }
+
+      let finished = false;
+      const finish = () => {
+        if (finished) return;
+        finished = true;
+        schedule(warmNext);
+      };
+
+      video.addEventListener("canplay", finish, { once: true });
+      video.addEventListener("error", finish, { once: true });
+      window.setTimeout(finish, 5000);
+    };
+
+    schedule(warmNext);
+  };
+
+  if (document.readyState === "complete") warmVideosSequentially();
+  else window.addEventListener("load", warmVideosSequentially, { once: true });
 }
 
 function setupPartnerInquiry() {
