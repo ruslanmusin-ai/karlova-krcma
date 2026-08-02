@@ -163,6 +163,34 @@ main {
   color: rgba(255, 255, 255, 0.75);
 }
 
+.hero__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.8rem 1.15rem;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  backdrop-filter: blur(8px);
+}
+
+.hero__play:hover,
+.hero__play:focus-visible {
+  background: rgba(0, 0, 0, 0.82);
+  border-color: rgba(255, 255, 255, 0.86);
+}
+
+.hero__play[hidden] {
+  display: none;
+}
+
 .hero__content {
   position: relative;
   z-index: 1;

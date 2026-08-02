@@ -20,6 +20,7 @@ function populateHero() {
 function setupHeroVideo() {
   const video = document.getElementById("heroVideo");
   const placeholder = document.getElementById("videoPlaceholder");
+  const playButton = document.getElementById("heroPlayButton");
 
   if (heroVideoConfig.posterSrc) {
     video.poster = heroVideoConfig.posterSrc;
@@ -30,15 +31,28 @@ function setupHeroVideo() {
     return;
   }
 
-  video.src = heroVideoConfig.videoSrc;
-  video.load();
-  video.play().catch(() => {});
+  if (!video.getAttribute("src")) video.src = heroVideoConfig.videoSrc;
+
+  const showPlayButton = () => {
+    if (playButton) playButton.hidden = false;
+  };
+  const hidePlayButton = () => {
+    if (playButton) playButton.hidden = true;
+  };
+  const attemptPlayback = () => video.play().then(hidePlayButton).catch(showPlayButton);
+
+  attemptPlayback();
+  playButton?.addEventListener("click", attemptPlayback);
+  video.addEventListener("playing", hidePlayButton);
+  window.setTimeout(() => {
+    if (video.paused) showPlayButton();
+  }, 1200);
   if (heroVideoConfig.fallbackVideoSrc) {
     video.onerror = () => {
       if (video.src.includes(heroVideoConfig.fallbackVideoSrc)) return;
       video.src = heroVideoConfig.fallbackVideoSrc;
       video.load();
-      video.play().catch(() => {});
+      attemptPlayback();
     };
   }
   video.addEventListener("canplay", () => {
@@ -68,7 +82,7 @@ function setupCardGallery() {
   ) return;
 
   const attachVideo = (video, preload = "metadata") => {
-    if (!video.src) {
+    if (!video.getAttribute("src") && video.dataset.src) {
       video.preload = preload;
       video.src = video.dataset.src;
       video.load();
@@ -79,19 +93,6 @@ function setupCardGallery() {
       video.preload = "auto";
     }
   };
-
-  const proximityObserver = new IntersectionObserver(
-    (entries, observer) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        attachVideo(entry.target, "metadata");
-        observer.unobserve(entry.target);
-      });
-    },
-    { rootMargin: "700px 0px", threshold: 0 }
-  );
-
-  cardVideos.forEach((video) => proximityObserver.observe(video));
 
   const openCard = (card) => {
     const image = card.querySelector(".expanding-card__image");
@@ -127,16 +128,17 @@ function setupCardGallery() {
 
       card.addEventListener("mouseenter", playVideo);
       card.addEventListener("mouseleave", resetVideo);
-
-      if (isTouchFirst) {
-        card.addEventListener("click", () => {
-          if (hoverVideo.paused) playVideo();
-          else resetVideo();
-        });
-      } else {
-        card.addEventListener("focus", playVideo);
-        card.addEventListener("blur", resetVideo);
-      }
+      card.addEventListener("click", () => {
+        if (hoverVideo.paused) playVideo();
+        else if (isTouchFirst) resetVideo();
+      });
+      card.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        if (hoverVideo.paused) playVideo();
+        else resetVideo();
+      });
+      card.addEventListener("blur", resetVideo);
       return;
     }
 
