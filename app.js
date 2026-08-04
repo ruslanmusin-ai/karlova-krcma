@@ -5,9 +5,14 @@ const content = {
   }
 };
 
+const isSafari = /Safari/i.test(navigator.userAgent) &&
+  !/(Chrome|Chromium|CriOS|FxiOS|EdgiOS|OPiOS|Android)/i.test(navigator.userAgent);
+
 const heroVideoConfig = {
-  videoSrc: "",
-  fallbackVideoSrc: "",
+  videoSrc: isSafari
+    ? "assets/hero-background.mp4?v=20260802-faststart"
+    : "assets/hero-background.webm?v=20260804-uploaded-vp9",
+  fallbackVideoSrc: isSafari ? "" : "assets/hero-background.mp4?v=20260802-faststart",
   posterSrc: "assets/hero-poster.webp",
   isPlaceholder: false
 };
