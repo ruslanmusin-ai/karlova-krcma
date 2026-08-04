@@ -30,15 +30,11 @@
             poster=""
           >
             <source
-              src="assets/hero-background-av1.webm?v=20260804-av1-light"
+              src="assets/hero-background-av1.webm?v=20260804-av1-light-ed83"
               type='video/webm; codecs="av01.0.08M.10"'
             />
             <source
-              src="assets/hero-background-hevc.mp4?v=20260804-visual-lossless"
-              type='video/mp4; codecs="hvc1"'
-            />
-            <source
-              src="assets/hero-background.mp4?v=20260804-faststart"
+              src="assets/hero-background.mp4?v=20260804-faststart-ed83"
               type="video/mp4"
             />
           </video>
@@ -53,6 +49,11 @@
           <h1 class="hero__title" id="heroTitle"></h1>
           <p class="hero__subtitle" id="heroSubtitle"></p>
           <a class="hero__cta" href="#flavors">EXPLORE OUR BEERS</a>
+        </div>
+
+        <div class="hero__scroll-cue" aria-hidden="true">
+          <span class="hero__scroll-icon" aria-hidden="true"><i></i></span>
+          <span>Scroll to explore</span>
         </div>
       </section>
 
@@ -74,12 +75,12 @@
             >
             <article class="expanding-card expanding-card--video">
               <video
-                src="assets/karlova-premium-card.mp4?v=20260804-faststart"
+                src="assets/karlova-premium-card.mp4"
                 class="expanding-card__image"
                 muted
                 loop
                 playsinline
-                preload="metadata"
+                preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Premium 12 beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -100,9 +101,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                src="assets/karlova-svetle-card.mp4?v=20260804-faststart"
+                src="assets/karlova-svetle-card.mp4?v=20260726-order"
                 class="expanding-card__image"
-                muted loop playsinline preload="metadata"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Světlé 10 beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -123,9 +124,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                src="assets/karlova-jantar-card.mp4?v=20260804-faststart"
+                src="assets/karlova-jantar-card.mp4?v=20260726-order"
                 class="expanding-card__image"
-                muted loop playsinline preload="metadata"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Jantar 12 beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -146,9 +147,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                src="assets/karlova-psenicne-card.mp4?v=20260804-faststart"
+                src="assets/karlova-psenicne-card.mp4?v=20260726-order"
                 class="expanding-card__image"
-                muted loop playsinline preload="metadata"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Pšeničné 12 wheat beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -169,9 +170,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                src="assets/karlova-rezane-card.mp4?v=20260804-faststart"
+                src="assets/karlova-rezane-card.mp4?v=20260726-order"
                 class="expanding-card__image"
-                muted loop playsinline preload="metadata"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Řezané 11 beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -192,9 +193,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                src="assets/karlova-cerne-card.mp4?v=20260804-faststart"
+                src="assets/karlova-cerne-card.mp4?v=20260726-order"
                 class="expanding-card__image"
-                muted loop playsinline preload="metadata"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Černé 11 beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -215,9 +216,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                src="assets/karlova-nonalcohol-card.mp4?v=20260804-faststart"
+                src="assets/karlova-nonalcohol-card.mp4?v=20260726-1805"
                 class="expanding-card__image"
-                muted loop playsinline preload="metadata"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Premium 0 alcohol-free beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -241,89 +242,88 @@
         </div>
       </section>
 
-      <section class="production section-shell" id="production">
-        <div class="section-head">
-          <p class="section-head__eyebrow">Экран 3</p>
-          <h2 class="section-head__title">Производство как живая демонстрация бренда</h2>
-          <p class="section-head__lead">
-            Этот экран собран как витрина для видео и фото с производства. Сейчас он уже
-            показывает механику выбора формата и фактуру процесса, а финальные медиа можно просто
-            подменить в готовые слоты.
-          </p>
-        </div>
+      <section class="contact-section" id="contact">
+        <div class="contact-section__inner">
+          <header class="contact-section__intro reveal">
+            <h2 class="contact-section__title">Meet the people behind Karlův Pivovar</h2>
+            <p class="contact-section__lead">
+              Talk directly with the people shaping Karlův Pivovar — from brand vision and
+              international growth to brewing technology.
+            </p>
+          </header>
 
-        <div class="production__layout">
-          <div class="production__selector" id="productionSelector" aria-label="Форматы производства"></div>
+          <div class="contact-section__layout">
+            <div class="contact-form-wrap reveal">
+              <h3 class="contact-form-wrap__title">Send an Inquiry</h3>
+              <form
+                class="contact-form"
+                id="partnerInquiryForm"
+                action="https://formsubmit.co/Evg.Grigoriev@karluv-pivovar.cz"
+                method="POST"
+              >
+                <input type="hidden" name="_subject" value="New inquiry from Karlova Krčma website" />
+                <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_captcha" value="false" />
+                <div class="contact-form__pair">
+                  <label class="contact-field">
+                    <span>Name</span>
+                    <input name="name" type="text" autocomplete="name" placeholder="Your name" required />
+                  </label>
+                  <label class="contact-field">
+                    <span>Email</span>
+                    <input name="email" type="email" autocomplete="email" placeholder="your@email.com" required />
+                  </label>
+                </div>
 
-          <article class="production-stage" id="productionStage">
-            <div class="production-stage__media">
-              <video
-                id="productionVideo"
-                class="production-stage__video"
-                muted
-                loop
-                playsinline
-                preload="metadata"
-              ></video>
-              <div class="production-stage__overlay"></div>
-              <div class="production-stage__placeholder" id="productionPlaceholder">
-                Подключите готовое видео этого этапа
-              </div>
+                <button class="contact-form__submit" type="submit">
+                  <span>Submit Inquiry</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m22 2-7 20-4-9-9-4Z"></path>
+                    <path d="M22 2 11 13"></path>
+                  </svg>
+                </button>
+                <p class="contact-form__status" aria-live="polite"></p>
+              </form>
             </div>
 
-            <div class="production-stage__content">
-              <p class="production-stage__eyebrow" id="productionEyebrow"></p>
-              <h3 class="production-stage__title" id="productionTitle"></h3>
-              <p class="production-stage__text" id="productionText"></p>
+            <aside class="contact-details" aria-label="Contact details">
+              <a class="team-contact reveal" href="mailto:Jaroslav.Hubacek@karluv-pivovar.cz">
+                <span class="team-contact__portrait">
+                  <img src="assets/team-jaroslav.png" alt="Jaroslav Hubáček" />
+                </span>
+                <span class="team-contact__copy">
+                  <strong>Jaroslav Hubáček</strong>
+                  <small>Ideologist &amp; Founder</small>
+                  <span>Jaroslav.Hubacek@karluv-pivovar.cz</span>
+                </span>
+              </a>
 
-              <div class="production-stage__fact">
-                <span class="production-stage__fact-label">Интересный факт</span>
-                <p id="productionFact"></p>
-              </div>
+              <a class="team-contact reveal" href="mailto:Evg.Grigoriev@karluv-pivovar.cz">
+                <span class="team-contact__portrait team-contact__portrait--monogram" aria-hidden="true">
+                  EG
+                </span>
+                <span class="team-contact__copy">
+                  <strong>Evgheni Grigoriev</strong>
+                  <small>Managing Partner &amp; CEO</small>
+                  <span>Evg.Grigoriev@karluv-pivovar.cz</span>
+                </span>
+              </a>
 
-              <div class="production-stage__metrics" id="productionMetrics"></div>
-            </div>
-          </article>
+              <a class="team-contact reveal" href="mailto:Pter.Hostas@karluv-pivovar.cz">
+                <span class="team-contact__portrait team-contact__portrait--monogram" aria-hidden="true">
+                  PH
+                </span>
+                <span class="team-contact__copy">
+                  <strong>Petr Hostáš</strong>
+                  <small>Chief Technologist · Sládek</small>
+                  <span>Pter.Hostas@karluv-pivovar.cz</span>
+                </span>
+              </a>
+            </aside>
+          </div>
         </div>
       </section>
 
-      <section class="partners section-shell" id="partners">
-        <div class="section-head">
-          <p class="section-head__eyebrow">Экран 4</p>
-          <h2 class="section-head__title">Инструмент для переговоров, а не просто лендинг</h2>
-          <p class="section-head__lead">
-            После знакомства с брендом и линейкой человеку нужен один понятный следующий шаг:
-            оставить контакт и перейти к обсуждению сотрудничества.
-          </p>
-        </div>
-
-        <div class="partners__hero">
-          <div class="partners__reasons" id="partnerReasons"></div>
-
-          <form class="partner-form">
-            <p class="partner-form__eyebrow">Become a Partner</p>
-            <h3 class="partner-form__title">Оставьте контакт для обсуждения сотрудничества</h3>
-
-            <label class="partner-form__label" for="partnerName">Имя / компания</label>
-            <input id="partnerName" class="partner-form__input" type="text" placeholder="Например, Retail Group CZ" />
-
-            <label class="partner-form__label" for="partnerContact">Email или телефон</label>
-            <input id="partnerContact" class="partner-form__input" type="text" placeholder="+420 или business@email.com" />
-
-            <label class="partner-form__label" for="partnerMessage">Комментарий</label>
-            <textarea
-              id="partnerMessage"
-              class="partner-form__textarea"
-              placeholder="Канал продаж, рынок, формат поставки"
-            ></textarea>
-
-            <button class="partner-form__button" type="button">ОБСУДИТЬ СОТРУДНИЧЕСТВО</button>
-            <a class="partner-form__link" id="partnersJoinEmail" href="#">info@karlu-pivovar.cz</a>
-          </form>
-        </div>
-
-        <div class="partners__usage" id="partnerUsage"></div>
-      </section>
     </main>
 
     <dialog class="card-modal" id="cardModal" aria-labelledby="cardModalTitle">
@@ -342,6 +342,6 @@
       </div>
     </dialog>
 
-    <script src="app.js?v=20260804-modern-visual-lossless"></script>
+    <script src="app.js?v=20260804-ed83-av1"></script>
   </body>
 </html>
