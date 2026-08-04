@@ -110,14 +110,21 @@ main {
   inset: 0;
   z-index: -1;
   background: var(--hero-fallback);
+  background-position: center;
+  background-size: cover;
 }
 
 .hero__media {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 1;
+  opacity: 0;
   filter: saturate(0.92);
+  transition: opacity 320ms var(--ease-out-quint);
+}
+
+.hero.is-video-playing .hero__media {
+  opacity: 1;
 }
 
 .hero__grain {
@@ -270,6 +277,7 @@ main {
   transform: scale(1);
   filter: saturate(0.92) brightness(1);
   transition:
+    opacity 320ms var(--ease-out-quint),
     transform 1600ms var(--ease-out-expo),
     filter 1200ms var(--ease-out-quint);
 }
@@ -644,6 +652,21 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.expanding-card--video {
+  background-color: #10100f;
+  background-position: center;
+  background-size: cover;
+}
+
+.expanding-card--video .expanding-card__image {
+  opacity: 0;
+  transition: opacity 220ms var(--ease-out-quint);
+}
+
+.expanding-card--video.is-video-playing .expanding-card__image {
+  opacity: 1;
 }
 
 .expanding-card:not(.expanding-card--video) .expanding-card__image {

@@ -6,7 +6,7 @@ const content = {
 };
 
 const heroVideoConfig = {
-  videoSrc: "assets/hero-background.mp4?v=20260802-faststart",
+  videoSrc: "assets/hero-background-web.m4v?v=20260804-lite",
   fallbackVideoSrc: "",
   posterSrc: "assets/hero-poster.webp",
   isPlaceholder: false
@@ -18,12 +18,15 @@ function populateHero() {
 }
 
 function setupHeroVideo() {
+  const hero = document.getElementById("hero");
   const video = document.getElementById("heroVideo");
+  const mediaWrap = video.closest(".hero__media-wrap");
   const placeholder = document.getElementById("videoPlaceholder");
   const playButton = document.getElementById("heroPlayButton");
 
   if (heroVideoConfig.posterSrc) {
     video.poster = heroVideoConfig.posterSrc;
+    if (mediaWrap) mediaWrap.style.backgroundImage = `url("${heroVideoConfig.posterSrc}")`;
   }
 
   if (!heroVideoConfig.videoSrc || heroVideoConfig.isPlaceholder) {
@@ -43,7 +46,10 @@ function setupHeroVideo() {
 
   attemptPlayback();
   playButton?.addEventListener("click", attemptPlayback);
-  video.addEventListener("playing", hidePlayButton);
+  video.addEventListener("playing", () => {
+    hero?.classList.add("is-video-playing");
+    hidePlayButton();
+  });
   window.setTimeout(() => {
     if (video.paused) showPlayButton();
   }, 1200);
@@ -113,6 +119,7 @@ function setupCardGallery() {
     const hoverVideo = card.querySelector("video.expanding-card__image");
 
     if (hoverVideo) {
+      if (hoverVideo.poster) card.style.backgroundImage = `url("${hoverVideo.poster}")`;
       card.tabIndex = 0;
       card.setAttribute("aria-label", hoverVideo.getAttribute("aria-label"));
       const isTouchFirst = window.matchMedia("(hover: none), (pointer: coarse)").matches;
@@ -122,14 +129,25 @@ function setupCardGallery() {
           if (video === hoverVideo || video.paused) return;
           video.pause();
           video.currentTime = 0;
+          video.closest(".expanding-card")?.classList.remove("is-video-loading", "is-video-playing");
         });
+        card.classList.add("is-video-loading");
         attachVideo(hoverVideo, "auto");
         hoverVideo.play().catch(() => {});
       };
       const resetVideo = () => {
         hoverVideo.pause();
         hoverVideo.currentTime = 0;
+        card.classList.remove("is-video-loading", "is-video-playing");
       };
+
+      hoverVideo.addEventListener("playing", () => {
+        card.classList.remove("is-video-loading");
+        card.classList.add("is-video-playing");
+      });
+      hoverVideo.addEventListener("error", () => {
+        card.classList.remove("is-video-loading", "is-video-playing");
+      });
 
       card.addEventListener("mouseenter", playVideo);
       card.addEventListener("mouseleave", resetVideo);
