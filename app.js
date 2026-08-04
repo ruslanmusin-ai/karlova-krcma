@@ -6,7 +6,7 @@ const content = {
 };
 
 const heroVideoConfig = {
-  videoSrc: "assets/hero-background-web.m4v?v=20260804-lite",
+  videoSrc: "assets/hero-background.mp4?v=20260802-faststart",
   fallbackVideoSrc: "",
   posterSrc: "assets/hero-poster.webp",
   isPlaceholder: false
@@ -43,13 +43,21 @@ function setupHeroVideo() {
     if (playButton) playButton.hidden = true;
   };
   const attemptPlayback = () => video.play().then(hidePlayButton).catch(showPlayButton);
+  let hasAnnouncedBuffered = false;
+  const announceBuffered = () => {
+    if (hasAnnouncedBuffered) return;
+    hasAnnouncedBuffered = true;
+    window.dispatchEvent(new Event("hero-video-buffered"));
+  };
 
   attemptPlayback();
   playButton?.addEventListener("click", attemptPlayback);
   video.addEventListener("playing", () => {
     hero?.classList.add("is-video-playing");
     hidePlayButton();
+    if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) announceBuffered();
   });
+  video.addEventListener("canplaythrough", announceBuffered, { once: true });
   window.setTimeout(() => {
     if (video.paused) showPlayButton();
   }, 1200);
@@ -81,6 +89,10 @@ function setupCardGallery() {
   const cardVideos = cards
     .map((card) => card.querySelector("video.expanding-card__image"))
     .filter(Boolean);
+  let prewarmController = null;
+  let prewarmIndex = 0;
+  let prewarmRunning = false;
+  let interactionActive = false;
 
   if (
     !gallery || !modal || !modalClose || !modalImage ||
@@ -98,6 +110,37 @@ function setupCardGallery() {
     if (preload === "auto" && video.preload !== "auto") {
       video.preload = "auto";
     }
+  };
+
+  const prewarmVideosSequentially = async () => {
+    if (prewarmRunning || interactionActive) return;
+    prewarmRunning = true;
+
+    while (prewarmIndex < cardVideos.length && !interactionActive) {
+      const video = cardVideos[prewarmIndex++];
+      if (video.getAttribute("src") || !video.dataset.src) continue;
+
+      prewarmController = new AbortController();
+      try {
+        const response = await fetch(video.dataset.src, {
+          cache: "force-cache",
+          signal: prewarmController.signal
+        });
+        if (response.ok) await response.arrayBuffer();
+      } catch (error) {
+        if (error.name !== "AbortError") console.warn("Video prewarm failed", error);
+      } finally {
+        prewarmController = null;
+      }
+    }
+
+    prewarmRunning = false;
+  };
+
+  const schedulePrewarm = () => {
+    const connection = navigator.connection;
+    if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || "")) return;
+    window.setTimeout(prewarmVideosSequentially, 500);
   };
 
   const openCard = (card) => {
@@ -125,6 +168,8 @@ function setupCardGallery() {
       const isTouchFirst = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
       const playVideo = () => {
+        interactionActive = true;
+        prewarmController?.abort();
         cardVideos.forEach((video) => {
           if (video === hoverVideo || video.paused) return;
           video.pause();
@@ -139,6 +184,8 @@ function setupCardGallery() {
         hoverVideo.pause();
         hoverVideo.currentTime = 0;
         card.classList.remove("is-video-loading", "is-video-playing");
+        interactionActive = false;
+        schedulePrewarm();
       };
 
       hoverVideo.addEventListener("playing", () => {
@@ -147,6 +194,8 @@ function setupCardGallery() {
       });
       hoverVideo.addEventListener("error", () => {
         card.classList.remove("is-video-loading", "is-video-playing");
+        interactionActive = false;
+        schedulePrewarm();
       });
 
       card.addEventListener("mouseenter", playVideo);
@@ -183,6 +232,10 @@ function setupCardGallery() {
   modal.addEventListener("close", () => {
     document.body.classList.remove("modal-open");
   });
+
+  const heroVideo = document.getElementById("heroVideo");
+  if (heroVideo?.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) schedulePrewarm();
+  else window.addEventListener("hero-video-buffered", schedulePrewarm, { once: true });
 
 }
 
