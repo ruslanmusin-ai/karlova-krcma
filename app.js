@@ -42,24 +42,25 @@ function setupHeroVideo() {
   const hidePlayButton = () => {
     if (playButton) playButton.hidden = true;
   };
-  const attemptPlayback = () => video.play().then(hidePlayButton).catch(showPlayButton);
   let hasAnnouncedBuffered = false;
   const announceBuffered = () => {
     if (hasAnnouncedBuffered) return;
     hasAnnouncedBuffered = true;
     window.dispatchEvent(new Event("hero-video-buffered"));
   };
-
-  attemptPlayback();
-  playButton?.addEventListener("click", attemptPlayback);
-  video.addEventListener("playing", () => {
+  const revealHeroVideo = () => {
     hero?.classList.add("is-video-playing");
     video.style.transition = "none";
     video.style.opacity = "1";
     hidePlayButton();
     if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) announceBuffered();
-  });
+  };
+  const attemptPlayback = () => video.play().then(revealHeroVideo).catch(showPlayButton);
+
+  video.addEventListener("playing", revealHeroVideo);
   video.addEventListener("canplaythrough", announceBuffered, { once: true });
+  attemptPlayback();
+  playButton?.addEventListener("click", attemptPlayback);
   window.setTimeout(() => {
     if (video.paused) showPlayButton();
   }, 1200);
