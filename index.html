@@ -22,14 +22,26 @@
           <video
             id="heroVideo"
             class="hero__media"
-            src="assets/hero-background.mp4?v=20260804-faststart"
             autoplay
             muted
             loop
             playsinline
             preload="auto"
             poster=""
-          ></video>
+          >
+            <source
+              src="assets/hero-background-av1.webm?v=20260804-visual-lossless"
+              type='video/webm; codecs="av01.0.08M.10"'
+            />
+            <source
+              src="assets/hero-background-hevc.mp4?v=20260804-visual-lossless"
+              type='video/mp4; codecs="hvc1"'
+            />
+            <source
+              src="assets/hero-background.mp4?v=20260804-faststart"
+              type="video/mp4"
+            />
+          </video>
           <div class="hero__media-placeholder" id="videoPlaceholder" aria-hidden="true">
             <p>Video pending</p>
             <span>Add the final hero video here.</span>
@@ -330,6 +342,6 @@
       </div>
     </dialog>
 
-    <script src="app.js?v=20260804-faststart-repair"></script>
+    <script src="app.js?v=20260804-modern-visual-lossless"></script>
   </body>
 </html>
