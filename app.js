@@ -98,44 +98,11 @@ function setupCardGallery() {
   const cardVideos = cards
     .map((card) => card.querySelector("video.expanding-card__image"))
     .filter(Boolean);
-  let hasScheduledPrewarm = false;
 
   if (
     !gallery || !modal || !modalClose || !modalImage ||
     !modalTitle || !modalSubtitle || !modalText || cards.length === 0
   ) return;
-
-  const attachVideo = (video, preload = "metadata") => {
-    if (!video.getAttribute("src") && video.dataset.src) {
-      video.preload = preload;
-      video.src = video.dataset.src;
-      video.load();
-      return;
-    }
-
-    if (preload === "auto" && video.preload !== "auto") {
-      video.preload = "auto";
-    }
-  };
-
-  const prewarmVideos = () => {
-    cardVideos.forEach((video) => {
-      if (!video.dataset.src) return;
-      const link = document.createElement("link");
-      link.rel = "prefetch";
-      link.as = "video";
-      link.href = video.dataset.src;
-      document.head.append(link);
-    });
-  };
-
-  const schedulePrewarm = () => {
-    if (hasScheduledPrewarm) return;
-    const connection = navigator.connection;
-    if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || "")) return;
-    hasScheduledPrewarm = true;
-    window.setTimeout(prewarmVideos, 500);
-  };
 
   const openCard = (card) => {
     const image = card.querySelector(".expanding-card__image");
@@ -168,10 +135,8 @@ function setupCardGallery() {
           video.currentTime = 0;
           video.style.removeProperty("opacity");
           video.style.removeProperty("transition");
-          video.closest(".expanding-card")?.classList.remove("is-video-loading", "is-video-playing");
+          video.closest(".expanding-card")?.classList.remove("is-video-playing");
         });
-        card.classList.add("is-video-loading");
-        attachVideo(hoverVideo, "auto");
         hoverVideo.play().catch(() => {});
       };
       const resetVideo = () => {
@@ -179,11 +144,10 @@ function setupCardGallery() {
         hoverVideo.currentTime = 0;
         hoverVideo.style.removeProperty("opacity");
         hoverVideo.style.removeProperty("transition");
-        card.classList.remove("is-video-loading", "is-video-playing");
+        card.classList.remove("is-video-playing");
       };
 
       hoverVideo.addEventListener("playing", () => {
-        card.classList.remove("is-video-loading");
         card.classList.add("is-video-playing");
         hoverVideo.style.transition = "none";
         hoverVideo.style.opacity = "1";
@@ -191,7 +155,7 @@ function setupCardGallery() {
       hoverVideo.addEventListener("error", () => {
         hoverVideo.style.removeProperty("opacity");
         hoverVideo.style.removeProperty("transition");
-        card.classList.remove("is-video-loading", "is-video-playing");
+        card.classList.remove("is-video-playing");
       });
 
       card.addEventListener("mouseenter", playVideo);
@@ -228,10 +192,6 @@ function setupCardGallery() {
   modal.addEventListener("close", () => {
     document.body.classList.remove("modal-open");
   });
-
-  const heroVideo = document.getElementById("heroVideo");
-  if (heroVideo?.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) schedulePrewarm();
-  else window.addEventListener("hero-video-buffered", schedulePrewarm, { once: true });
 
 }
 
