@@ -40,9 +40,13 @@ function setupHeroVideo() {
       video.play().catch(() => {});
     };
   }
+  const playHero = () => video.play().catch(() => {});
+  video.addEventListener("loadeddata", playHero, { once: true });
   video.addEventListener("canplay", () => {
     placeholder.style.display = "none";
+    playHero();
   });
+  playHero();
 }
 
 function setupCardGallery() {
