@@ -49,6 +49,7 @@ function setupHeroVideo() {
     if (playButton) playButton.hidden = true;
   };
   let hasAnnouncedBuffered = false;
+  let hasAnnouncedPlaying = false;
   const announceBuffered = () => {
     if (hasAnnouncedBuffered) return;
     hasAnnouncedBuffered = true;
@@ -59,6 +60,10 @@ function setupHeroVideo() {
     video.style.transition = "none";
     video.style.opacity = "1";
     hidePlayButton();
+    if (!hasAnnouncedPlaying) {
+      hasAnnouncedPlaying = true;
+      window.dispatchEvent(new Event("hero-video-playing"));
+    }
     if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) announceBuffered();
   };
   const attemptPlayback = () => video.play().then(revealHeroVideo).catch(showPlayButton);
@@ -98,11 +103,68 @@ function setupCardGallery() {
   const cardVideos = cards
     .map((card) => card.querySelector("video.expanding-card__image"))
     .filter(Boolean);
+  const startedCardVideos = new Set();
+  let activeCardPreloads = 0;
+  let hasStartedCardQueue = false;
+  const maxConcurrentCardPreloads = 2;
 
   if (
     !gallery || !modal || !modalClose || !modalImage ||
     !modalTitle || !modalSubtitle || !modalText || cards.length === 0
   ) return;
+
+  const isFullyBuffered = (video) => {
+    if (!Number.isFinite(video.duration) || video.duration <= 0 || video.buffered.length === 0) {
+      return false;
+    }
+    return video.buffered.end(video.buffered.length - 1) >= video.duration - 0.25;
+  };
+
+  const pumpCardQueue = () => {
+    if (!hasStartedCardQueue) return;
+    while (activeCardPreloads < maxConcurrentCardPreloads) {
+      const nextVideo = cardVideos.find((video) => !startedCardVideos.has(video));
+      if (!nextVideo) return;
+      startCardLoad(nextVideo);
+    }
+  };
+
+  const startCardLoad = (video) => {
+    if (startedCardVideos.has(video) || !video.dataset.src) return;
+
+    startedCardVideos.add(video);
+    activeCardPreloads += 1;
+    video.preload = "auto";
+    video.src = video.dataset.src;
+
+    let hasFinishedSlot = false;
+    let slotTimeout;
+    const finishSlot = () => {
+      if (hasFinishedSlot) return;
+      hasFinishedSlot = true;
+      activeCardPreloads = Math.max(0, activeCardPreloads - 1);
+      video.removeEventListener("progress", checkBuffer);
+      video.removeEventListener("canplaythrough", checkBuffer);
+      video.removeEventListener("error", finishSlot);
+      window.clearTimeout(slotTimeout);
+      pumpCardQueue();
+    };
+    const checkBuffer = () => {
+      if (isFullyBuffered(video)) finishSlot();
+    };
+
+    slotTimeout = window.setTimeout(finishSlot, 20000);
+    video.addEventListener("progress", checkBuffer);
+    video.addEventListener("canplaythrough", checkBuffer);
+    video.addEventListener("error", finishSlot, { once: true });
+    video.load();
+  };
+
+  const startCardQueue = () => {
+    if (hasStartedCardQueue) return;
+    hasStartedCardQueue = true;
+    pumpCardQueue();
+  };
 
   const openCard = (card) => {
     const image = card.querySelector(".expanding-card__image");
@@ -137,6 +199,7 @@ function setupCardGallery() {
           video.style.removeProperty("transition");
           video.closest(".expanding-card")?.classList.remove("is-video-playing");
         });
+        startCardLoad(hoverVideo);
         hoverVideo.play().catch(() => {});
       };
       const resetVideo = () => {
@@ -192,6 +255,10 @@ function setupCardGallery() {
   modal.addEventListener("close", () => {
     document.body.classList.remove("modal-open");
   });
+
+  const heroVideo = document.getElementById("heroVideo");
+  if (heroVideo && !heroVideo.paused && heroVideo.currentTime > 0) startCardQueue();
+  else window.addEventListener("hero-video-playing", startCardQueue, { once: true });
 
 }
 
