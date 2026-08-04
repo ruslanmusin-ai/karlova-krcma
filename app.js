@@ -54,6 +54,7 @@ function setupHeroVideo() {
   playButton?.addEventListener("click", attemptPlayback);
   video.addEventListener("playing", () => {
     hero?.classList.add("is-video-playing");
+    video.style.transition = "none";
     video.style.opacity = "1";
     hidePlayButton();
     if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) announceBuffered();
@@ -176,6 +177,7 @@ function setupCardGallery() {
           video.pause();
           video.currentTime = 0;
           video.style.removeProperty("opacity");
+          video.style.removeProperty("transition");
           video.closest(".expanding-card")?.classList.remove("is-video-loading", "is-video-playing");
         });
         card.classList.add("is-video-loading");
@@ -186,6 +188,7 @@ function setupCardGallery() {
         hoverVideo.pause();
         hoverVideo.currentTime = 0;
         hoverVideo.style.removeProperty("opacity");
+        hoverVideo.style.removeProperty("transition");
         card.classList.remove("is-video-loading", "is-video-playing");
         interactionActive = false;
         schedulePrewarm();
@@ -194,10 +197,12 @@ function setupCardGallery() {
       hoverVideo.addEventListener("playing", () => {
         card.classList.remove("is-video-loading");
         card.classList.add("is-video-playing");
+        hoverVideo.style.transition = "none";
         hoverVideo.style.opacity = "1";
       });
       hoverVideo.addEventListener("error", () => {
         hoverVideo.style.removeProperty("opacity");
+        hoverVideo.style.removeProperty("transition");
         card.classList.remove("is-video-loading", "is-video-playing");
         interactionActive = false;
         schedulePrewarm();
