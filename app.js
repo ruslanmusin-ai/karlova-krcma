@@ -6,7 +6,7 @@ const content = {
 };
 
 const heroVideoConfig = {
-  videoSrc: "assets/hero-background.mp4?v=20260802-faststart",
+  videoSrc: "",
   fallbackVideoSrc: "",
   posterSrc: "assets/hero-poster.webp",
   isPlaceholder: false
@@ -29,12 +29,13 @@ function setupHeroVideo() {
     if (mediaWrap) mediaWrap.style.backgroundImage = `url("${heroVideoConfig.posterSrc}")`;
   }
 
-  if (!heroVideoConfig.videoSrc || heroVideoConfig.isPlaceholder) {
+  const hasNativeSource = Boolean(video.getAttribute("src") || video.querySelector("source[src]"));
+  if ((!heroVideoConfig.videoSrc && !hasNativeSource) || heroVideoConfig.isPlaceholder) {
     placeholder.style.display = "flex";
     return;
   }
 
-  if (!video.getAttribute("src")) video.src = heroVideoConfig.videoSrc;
+  if (!hasNativeSource && heroVideoConfig.videoSrc) video.src = heroVideoConfig.videoSrc;
 
   const showPlayButton = () => {
     if (playButton) playButton.hidden = false;

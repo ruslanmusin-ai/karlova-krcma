@@ -29,8 +29,20 @@
             playsinline
             preload="auto"
             poster="assets/hero-poster.webp"
-            src="assets/hero-background.mp4?v=20260802-faststart"
-          ></video>
+          >
+            <source
+              src="assets/hero-background-av1.webm?v=20260804-modern-codecs"
+              type='video/webm; codecs="av01.0.08M.08"'
+            />
+            <source
+              src="assets/hero-background-vp9.webm?v=20260804-modern-codecs"
+              type='video/webm; codecs="vp9"'
+            />
+            <source
+              src="assets/hero-background.mp4?v=20260802-faststart"
+              type="video/mp4"
+            />
+          </video>
           <div class="hero__media-placeholder" id="videoPlaceholder" aria-hidden="true">
             <p>Video pending</p>
             <span>Add the final hero video here.</span>
@@ -347,6 +359,6 @@
       </div>
     </dialog>
 
-    <script src="app.js?v=20260804-original-quality-v7"></script>
+    <script src="app.js?v=20260804-modern-codecs"></script>
   </body>
 </html>
