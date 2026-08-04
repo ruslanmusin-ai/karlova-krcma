@@ -72,7 +72,7 @@ const content = {
 };
 
 const heroVideoConfig = {
-  videoSrc: "assets/hero-background.mp4",
+  videoSrc: "",
   fallbackVideoSrc: "",
   posterSrc: "",
   isPlaceholder: false
@@ -188,12 +188,13 @@ function setupHeroVideo() {
     video.poster = heroVideoConfig.posterSrc;
   }
 
-  if (!heroVideoConfig.videoSrc || heroVideoConfig.isPlaceholder) {
+  const hasNativeSource = Boolean(video.getAttribute("src") || video.querySelector("source[src]"));
+  if ((!heroVideoConfig.videoSrc && !hasNativeSource) || heroVideoConfig.isPlaceholder) {
     placeholder.style.display = "flex";
     return;
   }
 
-  video.src = heroVideoConfig.videoSrc;
+  if (!hasNativeSource && heroVideoConfig.videoSrc) video.src = heroVideoConfig.videoSrc;
   if (heroVideoConfig.fallbackVideoSrc) {
     video.onerror = () => {
       if (video.src.includes(heroVideoConfig.fallbackVideoSrc)) return;
@@ -244,7 +245,10 @@ function setupCardGallery() {
       card.tabIndex = 0;
       card.setAttribute("aria-label", hoverVideo.getAttribute("aria-label"));
 
-      const playVideo = () => hoverVideo.play().catch(() => {});
+      const playVideo = () => {
+        hoverVideo.preload = "auto";
+        hoverVideo.play().catch(() => {});
+      };
       const resetVideo = () => {
         hoverVideo.pause();
         hoverVideo.currentTime = 0;
