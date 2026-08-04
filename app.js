@@ -54,6 +54,7 @@ function setupHeroVideo() {
   playButton?.addEventListener("click", attemptPlayback);
   video.addEventListener("playing", () => {
     hero?.classList.add("is-video-playing");
+    video.style.opacity = "1";
     hidePlayButton();
     if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) announceBuffered();
   });
@@ -174,6 +175,7 @@ function setupCardGallery() {
           if (video === hoverVideo || video.paused) return;
           video.pause();
           video.currentTime = 0;
+          video.style.removeProperty("opacity");
           video.closest(".expanding-card")?.classList.remove("is-video-loading", "is-video-playing");
         });
         card.classList.add("is-video-loading");
@@ -183,6 +185,7 @@ function setupCardGallery() {
       const resetVideo = () => {
         hoverVideo.pause();
         hoverVideo.currentTime = 0;
+        hoverVideo.style.removeProperty("opacity");
         card.classList.remove("is-video-loading", "is-video-playing");
         interactionActive = false;
         schedulePrewarm();
@@ -191,8 +194,10 @@ function setupCardGallery() {
       hoverVideo.addEventListener("playing", () => {
         card.classList.remove("is-video-loading");
         card.classList.add("is-video-playing");
+        hoverVideo.style.opacity = "1";
       });
       hoverVideo.addEventListener("error", () => {
+        hoverVideo.style.removeProperty("opacity");
         card.classList.remove("is-video-loading", "is-video-playing");
         interactionActive = false;
         schedulePrewarm();
