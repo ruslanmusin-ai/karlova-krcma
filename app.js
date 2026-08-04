@@ -92,10 +92,7 @@ function setupCardGallery() {
   const cardVideos = cards
     .map((card) => card.querySelector("video.expanding-card__image"))
     .filter(Boolean);
-  let prewarmController = null;
-  let prewarmIndex = 0;
-  let prewarmRunning = false;
-  let interactionActive = false;
+  let hasScheduledPrewarm = false;
 
   if (
     !gallery || !modal || !modalClose || !modalImage ||
@@ -115,35 +112,23 @@ function setupCardGallery() {
     }
   };
 
-  const prewarmVideosSequentially = async () => {
-    if (prewarmRunning || interactionActive) return;
-    prewarmRunning = true;
-
-    while (prewarmIndex < cardVideos.length && !interactionActive) {
-      const video = cardVideos[prewarmIndex++];
-      if (video.getAttribute("src") || !video.dataset.src) continue;
-
-      prewarmController = new AbortController();
-      try {
-        const response = await fetch(video.dataset.src, {
-          cache: "force-cache",
-          signal: prewarmController.signal
-        });
-        if (response.ok) await response.arrayBuffer();
-      } catch (error) {
-        if (error.name !== "AbortError") console.warn("Video prewarm failed", error);
-      } finally {
-        prewarmController = null;
-      }
-    }
-
-    prewarmRunning = false;
+  const prewarmVideos = () => {
+    cardVideos.forEach((video) => {
+      if (!video.dataset.src) return;
+      const link = document.createElement("link");
+      link.rel = "prefetch";
+      link.as = "video";
+      link.href = video.dataset.src;
+      document.head.append(link);
+    });
   };
 
   const schedulePrewarm = () => {
+    if (hasScheduledPrewarm) return;
     const connection = navigator.connection;
     if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || "")) return;
-    window.setTimeout(prewarmVideosSequentially, 500);
+    hasScheduledPrewarm = true;
+    window.setTimeout(prewarmVideos, 500);
   };
 
   const openCard = (card) => {
@@ -171,8 +156,6 @@ function setupCardGallery() {
       const isTouchFirst = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
       const playVideo = () => {
-        interactionActive = true;
-        prewarmController?.abort();
         cardVideos.forEach((video) => {
           if (video === hoverVideo || video.paused) return;
           video.pause();
@@ -191,8 +174,6 @@ function setupCardGallery() {
         hoverVideo.style.removeProperty("opacity");
         hoverVideo.style.removeProperty("transition");
         card.classList.remove("is-video-loading", "is-video-playing");
-        interactionActive = false;
-        schedulePrewarm();
       };
 
       hoverVideo.addEventListener("playing", () => {
@@ -205,8 +186,6 @@ function setupCardGallery() {
         hoverVideo.style.removeProperty("opacity");
         hoverVideo.style.removeProperty("transition");
         card.classList.remove("is-video-loading", "is-video-playing");
-        interactionActive = false;
-        schedulePrewarm();
       });
 
       card.addEventListener("mouseenter", playVideo);
