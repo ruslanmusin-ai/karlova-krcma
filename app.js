@@ -6,9 +6,9 @@ const content = {
 };
 
 const heroVideoConfig = {
-  videoSrc: "",
+  videoSrc: "assets/hero-background.mp4",
   fallbackVideoSrc: "",
-  posterSrc: "assets/hero-poster.webp",
+  posterSrc: "",
   isPlaceholder: false
 };
 
@@ -18,70 +18,28 @@ function populateHero() {
 }
 
 function setupHeroVideo() {
-  const hero = document.getElementById("hero");
   const video = document.getElementById("heroVideo");
-  const mediaWrap = video.closest(".hero__media-wrap");
   const placeholder = document.getElementById("videoPlaceholder");
-  const playButton = document.getElementById("heroPlayButton");
 
   if (heroVideoConfig.posterSrc) {
     video.poster = heroVideoConfig.posterSrc;
-    if (mediaWrap) mediaWrap.style.backgroundImage = `url("${heroVideoConfig.posterSrc}")`;
   }
 
-  const hasNativeSource = Boolean(video.getAttribute("src") || video.querySelector("source[src]"));
-  if ((!heroVideoConfig.videoSrc && !hasNativeSource) || heroVideoConfig.isPlaceholder) {
+  if (!heroVideoConfig.videoSrc || heroVideoConfig.isPlaceholder) {
     placeholder.style.display = "flex";
     return;
   }
 
-  if (!hasNativeSource && heroVideoConfig.videoSrc) video.src = heroVideoConfig.videoSrc;
-
-  const showPlayButton = () => {
-    if (playButton) playButton.hidden = false;
-  };
-  const hidePlayButton = () => {
-    if (playButton) playButton.hidden = true;
-  };
-  let hasAnnouncedBuffered = false;
-  let hasAnnouncedPlaying = false;
-  const announceBuffered = () => {
-    if (hasAnnouncedBuffered) return;
-    hasAnnouncedBuffered = true;
-    window.dispatchEvent(new Event("hero-video-buffered"));
-  };
-  const revealHeroVideo = () => {
-    hero?.classList.add("is-video-playing");
-    video.style.transition = "none";
-    video.style.opacity = "1";
-    hidePlayButton();
-    if (!hasAnnouncedPlaying) {
-      hasAnnouncedPlaying = true;
-      window.dispatchEvent(new Event("hero-video-playing"));
-    }
-    if (video.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) announceBuffered();
-  };
-  const attemptPlayback = () => video.play().then(revealHeroVideo).catch(showPlayButton);
-
-  video.addEventListener("playing", revealHeroVideo);
-  video.addEventListener("canplaythrough", announceBuffered, { once: true });
-  attemptPlayback();
-  playButton?.addEventListener("click", attemptPlayback);
-  window.setTimeout(() => {
-    if (video.paused) showPlayButton();
-  }, 1200);
+  video.src = heroVideoConfig.videoSrc;
   if (heroVideoConfig.fallbackVideoSrc) {
     video.onerror = () => {
       if (video.src.includes(heroVideoConfig.fallbackVideoSrc)) return;
       video.src = heroVideoConfig.fallbackVideoSrc;
       video.load();
-      attemptPlayback();
+      video.play().catch(() => {});
     };
   }
   video.addEventListener("canplay", () => {
-    placeholder.style.display = "none";
-  });
-  video.addEventListener("loadeddata", () => {
     placeholder.style.display = "none";
   });
 }
@@ -95,71 +53,11 @@ function setupCardGallery() {
   const modalSubtitle = document.getElementById("cardModalSubtitle");
   const modalText = document.getElementById("cardModalText");
   const cards = Array.from(gallery?.querySelectorAll(".expanding-card") ?? []);
-  const cardVideos = cards
-    .map((card) => card.querySelector("video.expanding-card__image"))
-    .filter(Boolean);
-  const startedCardVideos = new Set();
-  let activeCardPreloads = 0;
-  let hasStartedCardQueue = false;
-  const maxConcurrentCardPreloads = 2;
 
   if (
     !gallery || !modal || !modalClose || !modalImage ||
     !modalTitle || !modalSubtitle || !modalText || cards.length === 0
   ) return;
-
-  const isFullyBuffered = (video) => {
-    if (!Number.isFinite(video.duration) || video.duration <= 0 || video.buffered.length === 0) {
-      return false;
-    }
-    return video.buffered.end(video.buffered.length - 1) >= video.duration - 0.25;
-  };
-
-  const pumpCardQueue = () => {
-    if (!hasStartedCardQueue) return;
-    while (activeCardPreloads < maxConcurrentCardPreloads) {
-      const nextVideo = cardVideos.find((video) => !startedCardVideos.has(video));
-      if (!nextVideo) return;
-      startCardLoad(nextVideo);
-    }
-  };
-
-  const startCardLoad = (video) => {
-    if (startedCardVideos.has(video) || !video.dataset.src) return;
-
-    startedCardVideos.add(video);
-    activeCardPreloads += 1;
-    video.preload = "auto";
-    video.src = video.dataset.src;
-
-    let hasFinishedSlot = false;
-    let slotTimeout;
-    const finishSlot = () => {
-      if (hasFinishedSlot) return;
-      hasFinishedSlot = true;
-      activeCardPreloads = Math.max(0, activeCardPreloads - 1);
-      video.removeEventListener("progress", checkBuffer);
-      video.removeEventListener("canplaythrough", checkBuffer);
-      video.removeEventListener("error", finishSlot);
-      window.clearTimeout(slotTimeout);
-      pumpCardQueue();
-    };
-    const checkBuffer = () => {
-      if (isFullyBuffered(video)) finishSlot();
-    };
-
-    slotTimeout = window.setTimeout(finishSlot, 20000);
-    video.addEventListener("progress", checkBuffer);
-    video.addEventListener("canplaythrough", checkBuffer);
-    video.addEventListener("error", finishSlot, { once: true });
-    video.load();
-  };
-
-  const startCardQueue = () => {
-    if (hasStartedCardQueue) return;
-    hasStartedCardQueue = true;
-    pumpCardQueue();
-  };
 
   const openCard = (card) => {
     const image = card.querySelector(".expanding-card__image");
@@ -180,54 +78,18 @@ function setupCardGallery() {
     const hoverVideo = card.querySelector("video.expanding-card__image");
 
     if (hoverVideo) {
-      if (hoverVideo.poster) card.style.backgroundImage = `url("${hoverVideo.poster}")`;
       card.tabIndex = 0;
       card.setAttribute("aria-label", hoverVideo.getAttribute("aria-label"));
-      const isTouchFirst = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
-      const playVideo = () => {
-        cardVideos.forEach((video) => {
-          if (video === hoverVideo || video.paused) return;
-          video.pause();
-          video.currentTime = 0;
-          video.style.removeProperty("opacity");
-          video.style.removeProperty("transition");
-          video.closest(".expanding-card")?.classList.remove("is-video-playing");
-        });
-        startCardLoad(hoverVideo);
-        hoverVideo.play().catch(() => {});
-      };
+      const playVideo = () => hoverVideo.play().catch(() => {});
       const resetVideo = () => {
         hoverVideo.pause();
         hoverVideo.currentTime = 0;
-        hoverVideo.style.removeProperty("opacity");
-        hoverVideo.style.removeProperty("transition");
-        card.classList.remove("is-video-playing");
       };
-
-      hoverVideo.addEventListener("playing", () => {
-        card.classList.add("is-video-playing");
-        hoverVideo.style.transition = "none";
-        hoverVideo.style.opacity = "1";
-      });
-      hoverVideo.addEventListener("error", () => {
-        hoverVideo.style.removeProperty("opacity");
-        hoverVideo.style.removeProperty("transition");
-        card.classList.remove("is-video-playing");
-      });
 
       card.addEventListener("mouseenter", playVideo);
       card.addEventListener("mouseleave", resetVideo);
-      card.addEventListener("click", () => {
-        if (hoverVideo.paused) playVideo();
-        else if (isTouchFirst) resetVideo();
-      });
-      card.addEventListener("keydown", (event) => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        if (hoverVideo.paused) playVideo();
-        else resetVideo();
-      });
+      card.addEventListener("focus", playVideo);
       card.addEventListener("blur", resetVideo);
       return;
     }
@@ -250,11 +112,6 @@ function setupCardGallery() {
   modal.addEventListener("close", () => {
     document.body.classList.remove("modal-open");
   });
-
-  const heroVideo = document.getElementById("heroVideo");
-  if (heroVideo && !heroVideo.paused && heroVideo.currentTime > 0) startCardQueue();
-  else window.addEventListener("hero-video-playing", startCardQueue, { once: true });
-
 }
 
 function setupPartnerInquiry() {

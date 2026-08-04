@@ -9,12 +9,11 @@
     <title>Karluv Pivovar | Partner Pitch</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" href="assets/hero-poster.webp" as="image" fetchpriority="high" />
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Prata&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=20260804-original-quality-v3" />
+    <link rel="stylesheet" href="styles.css?v=20260724-gallery-focus-fix" />
   </head>
   <body>
     <main>
@@ -23,13 +22,12 @@
           <video
             id="heroVideo"
             class="hero__media"
-            src="assets/hero-background.mp4?v=20260802-faststart"
             autoplay
             muted
             loop
             playsinline
-            preload="auto"
-            poster="assets/hero-poster.webp"
+            preload="metadata"
+            poster=""
           ></video>
           <div class="hero__media-placeholder" id="videoPlaceholder" aria-hidden="true">
             <p>Video pending</p>
@@ -37,11 +35,6 @@
           </div>
           <div class="hero__grain"></div>
         </div>
-
-        <button class="hero__play" id="heroPlayButton" type="button" hidden>
-          <span aria-hidden="true">▶</span>
-          Play video
-        </button>
 
         <div class="hero__content">
           <h1 class="hero__title" id="heroTitle"></h1>
@@ -73,13 +66,12 @@
             >
             <article class="expanding-card expanding-card--video">
               <video
-                data-src="assets/karlova-premium-card.mp4?v=20260802-faststart"
-                poster="assets/karlova-premium-poster.webp?v=20260802-480"
+                src="assets/karlova-premium-card.mp4"
                 class="expanding-card__image"
                 muted
                 loop
                 playsinline
-                preload="none"
+                preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Premium 12 beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -100,10 +92,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                data-src="assets/karlova-svetle-card.mp4?v=20260802-faststart"
-                poster="assets/karlova-svetle-poster.webp?v=20260802-480"
+                src="assets/karlova-svetle-card.mp4?v=20260726-order"
                 class="expanding-card__image"
-                muted loop playsinline preload="none"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Světlé 10 beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -124,10 +115,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                data-src="assets/karlova-jantar-card.mp4?v=20260802-faststart"
-                poster="assets/karlova-jantar-poster.webp?v=20260802-480"
+                src="assets/karlova-jantar-card.mp4?v=20260726-order"
                 class="expanding-card__image"
-                muted loop playsinline preload="none"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Jantar 12 beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -148,10 +138,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                data-src="assets/karlova-psenicne-card.mp4?v=20260802-faststart"
-                poster="assets/karlova-psenicne-poster.webp?v=20260802-480"
+                src="assets/karlova-psenicne-card.mp4?v=20260726-order"
                 class="expanding-card__image"
-                muted loop playsinline preload="none"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Pšeničné 12 wheat beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -172,10 +161,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                data-src="assets/karlova-rezane-card.mp4?v=20260802-faststart"
-                poster="assets/karlova-rezane-poster.webp?v=20260802-480"
+                src="assets/karlova-rezane-card.mp4?v=20260726-order"
                 class="expanding-card__image"
-                muted loop playsinline preload="none"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Řezané 11 beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -196,10 +184,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                data-src="assets/karlova-cerne-card.mp4?v=20260802-faststart"
-                poster="assets/karlova-cerne-poster.webp?v=20260802-480"
+                src="assets/karlova-cerne-card.mp4?v=20260726-order"
                 class="expanding-card__image"
-                muted loop playsinline preload="none"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Černé 11 beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -220,10 +207,9 @@
 
             <article class="expanding-card expanding-card--video">
               <video
-                data-src="assets/karlova-nonalcohol-card.mp4?v=20260802-faststart"
-                poster="assets/karlova-nonalcohol-poster.webp?v=20260802-480"
+                src="assets/karlova-nonalcohol-card.mp4?v=20260726-1805"
                 class="expanding-card__image"
-                muted loop playsinline preload="none"
+                muted loop playsinline preload="auto"
                 aria-label="Video featuring a can of Karlova Krčma Premium 0 alcohol-free beer"
               ></video>
               <div class="expanding-card__gradient"></div>
@@ -347,6 +333,6 @@
       </div>
     </dialog>
 
-    <script src="app.js?v=20260804-native-hero-autoplay"></script>
+    <script src="app.js?v=20260724-expanding-gallery"></script>
   </body>
 </html>
