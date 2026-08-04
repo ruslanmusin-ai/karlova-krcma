@@ -118,6 +118,11 @@ function setupCardGallery() {
       const isTouchFirst = window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
       const playVideo = () => {
+        cardVideos.forEach((video) => {
+          if (video === hoverVideo || video.paused) return;
+          video.pause();
+          video.currentTime = 0;
+        });
         attachVideo(hoverVideo, "auto");
         hoverVideo.play().catch(() => {});
       };
@@ -161,37 +166,6 @@ function setupCardGallery() {
     document.body.classList.remove("modal-open");
   });
 
-  const warmVideosSequentially = () => {
-    let index = 0;
-    const schedule = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 250));
-
-    const warmNext = () => {
-      const video = cardVideos[index++];
-      if (!video) return;
-
-      attachVideo(video, "auto");
-      if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
-        schedule(warmNext);
-        return;
-      }
-
-      let finished = false;
-      const finish = () => {
-        if (finished) return;
-        finished = true;
-        schedule(warmNext);
-      };
-
-      video.addEventListener("canplay", finish, { once: true });
-      video.addEventListener("error", finish, { once: true });
-      window.setTimeout(finish, 5000);
-    };
-
-    schedule(warmNext);
-  };
-
-  if (document.readyState === "complete") warmVideosSequentially();
-  else window.addEventListener("load", warmVideosSequentially, { once: true });
 }
 
 function setupPartnerInquiry() {
