@@ -54,27 +54,51 @@ function setupCardGallery() {
   const modal = document.getElementById("cardModal");
   const modalClose = document.getElementById("cardModalClose");
   const modalImage = document.getElementById("cardModalImage");
+  const modalVideo = document.getElementById("cardModalVideo");
   const modalTitle = document.getElementById("cardModalTitle");
   const modalSubtitle = document.getElementById("cardModalSubtitle");
   const modalText = document.getElementById("cardModalText");
   const cards = Array.from(gallery?.querySelectorAll(".expanding-card") ?? []);
+  const descriptions = {
+    "Full-bodied lager": "A full-bodied Czech lager with balanced malt character, gentle hop bitterness, and a clean finish.",
+    "Pale beer": "A crisp and refreshing pale beer with a light malt body and pleasant Czech hop bitterness.",
+    "Amber lager": "An unfiltered amber lager with a fuller malt profile, warm caramel notes, and a gentle hoppy finish.",
+    "Velvety wheat": "A velvety wheat beer with natural haze, soft fruit notes, and a lightly spiced finish.",
+    "Semi-dark lager": "A balanced semi-dark lager with a smooth body, caramel character, and restrained bitterness.",
+    "Smooth dark lager": "A smooth dark lager with roasted malt, caramel notes, and a rounded, velvety finish.",
+    "Alcohol-free": "A clean and refreshing alcohol-free beer with a light malt profile and gentle hop bitterness."
+  };
 
   if (
-    !gallery || !modal || !modalClose || !modalImage ||
-    !modalTitle || !modalSubtitle || !modalText || cards.length === 0
+    !gallery || !modal || !modalClose || !modalImage || !modalVideo ||
+    !modalTitle || cards.length === 0
   ) return;
 
   const openCard = (card) => {
     const image = card.querySelector(".expanding-card__image");
     const title = card.querySelector(".expanding-card__title");
-    const subtitle = card.querySelector(".expanding-card__panel-title");
-    const text = card.querySelector(".expanding-card__panel-text");
+    const videoSrc = card.dataset.modalVideo;
 
-    modalImage.src = image.currentSrc || image.src;
-    modalImage.alt = image.alt;
+    if (videoSrc) {
+      modalImage.hidden = true;
+      modalVideo.hidden = false;
+      modalVideo.src = videoSrc;
+      modalVideo.play().catch(() => {});
+    } else {
+      modalVideo.pause();
+      modalVideo.removeAttribute("src");
+      modalVideo.load();
+      modalVideo.hidden = true;
+      modalImage.hidden = false;
+      modalImage.src = image.currentSrc || image.src;
+      modalImage.alt = image.alt;
+    }
     modalTitle.textContent = title.textContent;
-    modalSubtitle.textContent = subtitle.textContent;
-    modalText.textContent = text.textContent.trim();
+    if (modalSubtitle) modalSubtitle.hidden = true;
+    if (modalText) {
+      modalText.hidden = false;
+      modalText.textContent = descriptions[title.textContent.trim()] || "";
+    }
     document.body.classList.add("modal-open");
     modal.showModal();
   };
@@ -115,7 +139,12 @@ function setupCardGallery() {
     if (event.target === modal) modal.close();
   });
   modal.addEventListener("close", () => {
+    modalVideo.pause();
+    modalVideo.currentTime = 0;
     document.body.classList.remove("modal-open");
+    window.requestAnimationFrame(() => {
+      cards.forEach((card) => card.blur());
+    });
   });
 }
 
