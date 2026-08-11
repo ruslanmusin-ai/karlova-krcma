@@ -58,20 +58,42 @@ function setupCardGallery() {
   const modalTitle = document.getElementById("cardModalTitle");
   const modalSubtitle = document.getElementById("cardModalSubtitle");
   const modalText = document.getElementById("cardModalText");
+  const modalSpecs = document.getElementById("cardModalSpecs");
   const cards = Array.from(gallery?.querySelectorAll(".expanding-card") ?? []);
-  const descriptions = {
-    "Full-bodied lager": "A full-bodied Czech lager with balanced malt character, gentle hop bitterness, and a clean finish.",
-    "Pale beer": "A crisp and refreshing pale beer with a light malt body and pleasant Czech hop bitterness.",
-    "Amber lager": "An unfiltered amber lager with a fuller malt profile, warm caramel notes, and a gentle hoppy finish.",
-    "Velvety wheat": "A velvety wheat beer with natural haze, soft fruit notes, and a lightly spiced finish.",
-    "Semi-dark lager": "A balanced semi-dark lager with a smooth body, caramel character, and restrained bitterness.",
-    "Smooth dark lager": "A smooth dark lager with roasted malt, caramel notes, and a rounded, velvety finish.",
-    "Alcohol-free": "A clean and refreshing alcohol-free beer with a light malt profile and gentle hop bitterness."
+  const products = {
+    "Full-bodied lager": {
+      description: "A full-bodied Czech lager with balanced malt character, gentle hop bitterness, and a clean finish.",
+      specs: [["percent", "4.8%", "ABV"], ["wheat", "12°", "Plato"], ["gauge", "Balanced", "Bitterness"], ["palette", "Golden", "Colour"], ["thermometer", "6–8°C", "Serve at"], ["sparkles", "Malt & hops", "Taste"]]
+    },
+    "Pale beer": {
+      description: "A crisp and refreshing pale beer with a light malt body and pleasant Czech hop bitterness.",
+      specs: [["percent", "4.0%", "ABV"], ["wheat", "10°", "Plato"], ["gauge", "Gentle", "Bitterness"], ["palette", "Pale gold", "Colour"], ["thermometer", "5–7°C", "Serve at"], ["sparkles", "Crisp & clean", "Taste"]]
+    },
+    "Amber lager": {
+      description: "An unfiltered amber lager with a fuller malt profile, warm caramel notes, and a gentle hoppy finish.",
+      specs: [["percent", "5.2%", "ABV"], ["wheat", "12°", "Plato"], ["gauge", "Balanced", "Bitterness"], ["palette", "Warm amber", "Colour"], ["thermometer", "7–9°C", "Serve at"], ["sparkles", "Caramel & malt", "Taste"]]
+    },
+    "Velvety wheat": {
+      description: "A velvety wheat beer with natural haze, soft fruit notes, and a lightly spiced finish.",
+      specs: [["beer", "Wheat", "Style"], ["wheat", "12°", "Plato"], ["gauge", "Mild", "Bitterness"], ["palette", "Cloudy gold", "Colour"], ["thermometer", "6–8°C", "Serve at"], ["sparkles", "Fruit & spice", "Taste"]]
+    },
+    "Semi-dark lager": {
+      description: "A balanced semi-dark lager with a smooth body, caramel character, and restrained bitterness.",
+      specs: [["percent", "4.6%", "ABV"], ["wheat", "11°", "Plato"], ["gauge", "Restrained", "Bitterness"], ["palette", "Ruby amber", "Colour"], ["thermometer", "7–9°C", "Serve at"], ["sparkles", "Toasted caramel", "Taste"]]
+    },
+    "Smooth dark lager": {
+      description: "A smooth dark lager with roasted malt, caramel notes, and a rounded, velvety finish.",
+      specs: [["percent", "4.4%", "ABV"], ["wheat", "11°", "Plato"], ["gauge", "Soft", "Bitterness"], ["palette", "Deep dark", "Colour"], ["thermometer", "7–9°C", "Serve at"], ["sparkles", "Roasted malt", "Taste"]]
+    },
+    "Alcohol-free": {
+      description: "A clean and refreshing alcohol-free beer with a light malt profile and gentle hop bitterness.",
+      specs: [["percent", "0.0%", "ABV"], ["beer", "Alcohol-free", "Style"], ["gauge", "Gentle", "Bitterness"], ["palette", "Pale gold", "Colour"], ["thermometer", "4–6°C", "Serve at"], ["sparkles", "Light & crisp", "Taste"]]
+    }
   };
 
   if (
     !gallery || !modal || !modalClose || !modalImage || !modalVideo ||
-    !modalTitle || cards.length === 0
+    !modalTitle || !modalSpecs || cards.length === 0
   ) return;
 
   const openCard = (card) => {
@@ -82,9 +104,17 @@ function setupCardGallery() {
     if (videoSrc) {
       modalImage.hidden = true;
       modalVideo.hidden = false;
+      modalVideo.classList.toggle("card-modal__video--slow-zoom", videoSrc.includes("modal-premium-12.mp4"));
       modalVideo.src = videoSrc;
+      // Restart the first product's zoom every time its modal opens.
+      if (modalVideo.classList.contains("card-modal__video--slow-zoom")) {
+        modalVideo.style.animation = "none";
+        void modalVideo.offsetWidth;
+        modalVideo.style.animation = "";
+      }
       modalVideo.play().catch(() => {});
     } else {
+      modalVideo.classList.remove("card-modal__video--slow-zoom");
       modalVideo.pause();
       modalVideo.removeAttribute("src");
       modalVideo.load();
@@ -93,12 +123,21 @@ function setupCardGallery() {
       modalImage.src = image.currentSrc || image.src;
       modalImage.alt = image.alt;
     }
+    const product = products[title.textContent.trim()];
     modalTitle.textContent = title.textContent;
     if (modalSubtitle) modalSubtitle.hidden = true;
     if (modalText) {
       modalText.hidden = false;
-      modalText.textContent = descriptions[title.textContent.trim()] || "";
+      modalText.textContent = product?.description || "";
     }
+    modalSpecs.replaceChildren();
+    (product?.specs || []).forEach(([icon, value, label]) => {
+      const item = document.createElement("div");
+      item.className = "card-modal__spec";
+      item.innerHTML = `<span class="card-modal__spec-icon" aria-hidden="true"><i data-lucide="${icon}"></i></span><span><strong>${value}</strong><small>${label}</small></span>`;
+      modalSpecs.append(item);
+    });
+    window.lucide?.createIcons({ attrs: { "stroke-width": 1.5 } });
     document.body.classList.add("modal-open");
     modal.showModal();
   };

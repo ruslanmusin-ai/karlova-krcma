@@ -508,7 +508,7 @@ main {
 }
 
 .card-modal {
-  width: min(60.75rem, calc(100vw - 2rem), calc(200dvh - 4rem));
+  width: min(72.9rem, calc(100vw - 2rem), calc(200dvh - 4rem));
   max-width: none;
   max-height: none;
   padding: 0;
@@ -581,6 +581,21 @@ main {
   display: none;
 }
 
+.card-modal__video--slow-zoom {
+  transform-origin: center center;
+  animation: modal-video-slow-zoom 5s ease-in-out forwards;
+}
+
+@keyframes modal-video-slow-zoom {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.2);
+  }
+}
+
 .card-modal__content {
   display: flex;
   flex-direction: column;
@@ -611,6 +626,64 @@ main {
   font-size: 0.95rem;
   line-height: 1.65;
   text-wrap: pretty;
+}
+
+.card-modal__specs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.card-modal__spec {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.card-modal__spec-icon {
+  display: grid;
+  flex: 0 0 2.35rem;
+  width: 2.35rem;
+  height: 2.35rem;
+  place-items: center;
+  border: 1px solid rgba(211, 178, 116, 0.46);
+  border-radius: 0.68rem;
+  color: #e0c28d;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(231, 201, 144, 0.18), transparent 58%),
+    rgba(211, 178, 116, 0.035);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 7px 18px rgba(0, 0, 0, 0.18);
+}
+
+.card-modal__spec-icon svg {
+  width: 1.08rem;
+  height: 1.08rem;
+  filter: drop-shadow(0 0 6px rgba(224, 194, 141, 0.16));
+}
+
+.card-modal__spec strong,
+.card-modal__spec small {
+  display: block;
+}
+
+.card-modal__spec strong {
+  color: #fff;
+  font-size: 0.95rem;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.card-modal__spec small {
+  margin-top: 0.15rem;
+  color: #949c9a;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 @keyframes card-modal-in {
@@ -742,7 +815,7 @@ main {
 }
 
 .contact-section__inner {
-  width: min(73.75rem, 100%);
+  width: min(88.5rem, 100%);
   margin: 0 auto;
 }
 
@@ -963,9 +1036,9 @@ main {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 1.1rem;
-  min-height: 8rem;
-  padding: 1rem;
+  gap: 1.32rem;
+  min-height: 9.6rem;
+  padding: 1.2rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   color: #fff;
@@ -1002,11 +1075,44 @@ main {
   opacity: 1;
 }
 
+.team-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  height: 9.6rem;
+  max-height: 9.6rem;
+  padding: 0.42rem 1.2rem;
+  overflow: hidden;
+  contain: layout paint;
+  transition: transform 320ms var(--ease-out-expo);
+}
+
+.team-logo:hover {
+  transform: scale(1.04);
+}
+
+.team-logo:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.team-logo > img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 8.76rem;
+  object-fit: contain;
+}
+
 .team-contact__portrait {
   display: grid;
-  flex: 0 0 5.75rem;
-  width: 5.75rem;
-  height: 5.75rem;
+  flex: 0 0 6.9rem;
+  width: 6.9rem;
+  height: 6.9rem;
   place-items: center;
   overflow: hidden;
   border-radius: 0.65rem;
@@ -1018,7 +1124,6 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
 }
 
 .team-contact__portrait--monogram {
@@ -1042,14 +1147,14 @@ main {
 }
 
 .team-contact__copy strong {
-  font-size: 1rem;
+  font-size: 1.2rem;
   line-height: 1.25;
 }
 
 .team-contact__copy small {
   margin-top: 0.28rem;
   color: #b8c4c4;
-  font-size: 0.78rem;
+  font-size: 0.936rem;
   line-height: 1.35;
 }
 
@@ -1057,7 +1162,7 @@ main {
   margin-top: 0.65rem;
   overflow: hidden;
   color: #e0e4e3;
-  font-size: 0.69rem;
+  font-size: 0.828rem;
   line-height: 1.3;
   text-overflow: ellipsis;
   white-space: nowrap;
