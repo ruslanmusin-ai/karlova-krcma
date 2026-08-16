@@ -98,7 +98,7 @@ function setupCardGallery() {
 
   const openCard = (card) => {
     const image = card.querySelector(".expanding-card__image");
-    const title = card.querySelector(".expanding-card__title");
+    const title = card.dataset.productTitle;
     const videoSrc = card.dataset.modalVideo;
 
     if (videoSrc) {
@@ -123,8 +123,8 @@ function setupCardGallery() {
       modalImage.src = image.currentSrc || image.src;
       modalImage.alt = image.alt;
     }
-    const product = products[title.textContent.trim()];
-    modalTitle.textContent = title.textContent;
+    const product = products[title];
+    modalTitle.textContent = title;
     if (modalSubtitle) modalSubtitle.hidden = true;
     if (modalText) {
       modalText.hidden = false;
@@ -165,6 +165,7 @@ function setupCardGallery() {
     card.tabIndex = 0;
     card.setAttribute("role", "button");
     card.setAttribute("aria-haspopup", "dialog");
+    card.setAttribute("aria-label", `Open ${card.dataset.productTitle} details`);
     card.addEventListener("click", () => openCard(card));
     card.addEventListener("keydown", (event) => {
       if (event.target !== card || (event.key !== "Enter" && event.key !== " ")) return;
