@@ -138,8 +138,28 @@ function setupCardGallery() {
       modalSpecs.append(item);
     });
     window.lucide?.createIcons({ attrs: { "stroke-width": 1.5 } });
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.setProperty("--scrollbar-compensation", `${scrollbarWidth}px`);
     document.body.classList.add("modal-open");
+    modal.classList.remove("is-closing");
     modal.showModal();
+  };
+
+  const closeModal = () => {
+    if (!modal.open || modal.classList.contains("is-closing")) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      modal.close();
+      return;
+    }
+
+    modal.classList.add("is-closing");
+    const finishClose = (event) => {
+      if (event.target !== modal || event.animationName !== "card-modal-out") return;
+      modal.removeEventListener("animationend", finishClose);
+      modal.close();
+    };
+    modal.addEventListener("animationend", finishClose);
   };
 
   cards.forEach((card) => {
@@ -174,14 +194,20 @@ function setupCardGallery() {
     });
   });
 
-  modalClose.addEventListener("click", () => modal.close());
+  modalClose.addEventListener("click", closeModal);
   modal.addEventListener("click", (event) => {
-    if (event.target === modal) modal.close();
+    if (event.target === modal) closeModal();
+  });
+  modal.addEventListener("cancel", (event) => {
+    event.preventDefault();
+    closeModal();
   });
   modal.addEventListener("close", () => {
+    modal.classList.remove("is-closing");
     modalVideo.pause();
     modalVideo.currentTime = 0;
     document.body.classList.remove("modal-open");
+    document.body.style.removeProperty("--scrollbar-compensation");
     window.requestAnimationFrame(() => {
       cards.forEach((card) => card.blur());
     });
