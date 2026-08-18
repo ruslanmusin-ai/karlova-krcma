@@ -800,7 +800,7 @@ main {
   height: 100%;
   object-fit: cover;
   opacity: 1;
-  filter: brightness(0.85);
+  filter: brightness(0.8);
   mix-blend-mode: normal;
 }
 
