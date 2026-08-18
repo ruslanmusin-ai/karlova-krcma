@@ -104,9 +104,12 @@ function setupCardGallery() {
     if (videoSrc) {
       modalImage.hidden = true;
       modalVideo.hidden = false;
-      modalVideo.classList.toggle("card-modal__video--slow-zoom", videoSrc.includes("modal-premium-12.mp4"));
+      modalVideo.classList.toggle(
+        "card-modal__video--slow-zoom",
+        videoSrc.includes("modal-premium-feature-v2.mp4")
+      );
       modalVideo.src = videoSrc;
-      // Restart the first product's zoom every time its modal opens.
+      // Restart the product video zoom every time its modal opens.
       if (modalVideo.classList.contains("card-modal__video--slow-zoom")) {
         modalVideo.style.animation = "none";
         void modalVideo.offsetWidth;
