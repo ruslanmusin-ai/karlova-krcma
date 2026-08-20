@@ -104,20 +104,9 @@ function setupCardGallery() {
     if (videoSrc) {
       modalImage.hidden = true;
       modalVideo.hidden = false;
-      modalVideo.classList.toggle(
-        "card-modal__video--slow-zoom",
-        videoSrc.includes("modal-premium-feature-v2.mp4")
-      );
       modalVideo.src = videoSrc;
-      // Restart the product video zoom every time its modal opens.
-      if (modalVideo.classList.contains("card-modal__video--slow-zoom")) {
-        modalVideo.style.animation = "none";
-        void modalVideo.offsetWidth;
-        modalVideo.style.animation = "";
-      }
       modalVideo.play().catch(() => {});
     } else {
-      modalVideo.classList.remove("card-modal__video--slow-zoom");
       modalVideo.pause();
       modalVideo.removeAttribute("src");
       modalVideo.load();
